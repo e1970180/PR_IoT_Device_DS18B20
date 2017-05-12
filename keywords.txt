@@ -18,10 +18,10 @@ update			KEYWORD2
 inMsgCallback		KEYWORD2	
 setupHW			KEYWORD2
 loopHW			KEYWORD2
+getTemp			KEYWORD2
 
 ######################################
 # Constants (LITERAL1)
 ######################################
 
-ONE_WIRE_BUS      		LITERAL1
 TEMPERATURE_PRECISION		LITERAL1

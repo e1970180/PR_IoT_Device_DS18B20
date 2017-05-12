@@ -6,19 +6,19 @@
 		postMsg("temperature", "HELLO"); 
 	}
 	
-	void 	PR_IoT_DS18B20::setupHW() {
+	void 	PR_IoT_DS18B20::setupHW(uint8_t pin, uint8_t resolution) {
 		
-		oneWire = new OneWire(ONE_WIRE_BUS);    //for shadow  temp sensor
+		oneWire = new OneWire(pin);    					//
 		sensors = new DallasTemperature(oneWire);       // Pass our oneWire reference to Dallas Temperature. 
 		sensors->begin();
-		sensors->setResolution(TEMPERATURE_PRECISION);
+		sensors->setResolution(resolution);
 	}   
 			
 	void	PR_IoT_DS18B20::update() {	
 		
 		sensors->requestTemperatures();
-		float	t = sensors->getTempCByIndex(0);
-		postMsg("temperature", String(t, 1));
+		lastMeasuredTemp = sensors->getTempCByIndex(0);
+		postMsg("temperature", String(lastMeasuredTemp, 1));
 	}
 	
 	void	PR_IoT_DS18B20::inMsgCallback() {
