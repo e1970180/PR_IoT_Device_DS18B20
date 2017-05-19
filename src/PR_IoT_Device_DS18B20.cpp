@@ -3,7 +3,7 @@
     #include <arduino.h>    
   
 	void 	PR_IoT_DS18B20::announce() {
-		postMsg("temperature", "HELLO"); 
+		postMsg("", "HELLO"); 
 	}
 	
 	void 	PR_IoT_DS18B20::setupHW(uint8_t pin, uint8_t resolution) {
@@ -13,12 +13,21 @@
 		sensors->begin();
 		sensors->setResolution(resolution);
 	}   
-			
+	
+	void	PR_IoT_DS18B20::loopHW() {	
+		
+		if ( (IoTtime.now() - lastMeasuredTime) > TEMPERATURE_MEAS_INTERVAL ) {
+			sensors->requestTemperatures();
+			lastMeasuredTemp = sensors->getTempCByIndex(0);
+		
+			lastMeasuredTime = IoTtime.now();
+		}
+	}
+
+	
 	void	PR_IoT_DS18B20::update() {	
 		
-		sensors->requestTemperatures();
-		lastMeasuredTemp = sensors->getTempCByIndex(0);
-		postMsg("temperature", String(lastMeasuredTemp, 1));
+		postMsg("", String(lastMeasuredTemp, 1));
 	}
 	
 	void	PR_IoT_DS18B20::inMsgCallback() {

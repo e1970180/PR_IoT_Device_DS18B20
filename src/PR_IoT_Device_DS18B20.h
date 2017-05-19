@@ -8,9 +8,12 @@
 	#include <DallasTemperature.h> //https://milesburton.com/Dallas_Temperature_Control_Library
 
 	#ifndef	TEMPERATURE_PRECISION
-		#define	TEMPERATURE_PRECISION	9		//
+		#define	TEMPERATURE_PRECISION		9		//[9 ...12]
 	#endif
 	
+	#ifndef	TEMPERATURE_MEAS_INTERVAL
+		#define	TEMPERATURE_MEAS_INTERVAL	15		//[sek]
+	#endif
 	
 class PR_IoT_DS18B20 : public PR_IoT_DeviceClass {
         public:
@@ -21,14 +24,15 @@ class PR_IoT_DS18B20 : public PR_IoT_DeviceClass {
             void 			update();
             virtual void 	inMsgCallback(); 
             virtual void 	setupHW(uint8_t pin, uint8_t resolution = TEMPERATURE_PRECISION );   
-			virtual void	loopHW()			{}
+			virtual void	loopHW();
 			
 			float 			getTemp()			{	return lastMeasuredTemp;	}
 			
         protected:
-    		OneWire                 *oneWire;    //for shadow  temp sensor
-			DallasTemperature       *sensors;       // Pass our oneWire reference to Dallas Temperature. 
-			float 			lastMeasuredTemp;
+    		OneWire                 *oneWire;    			//for shadow  temp sensor
+			DallasTemperature       *sensors;       		// Pass our oneWire reference to Dallas Temperature. 
+			float 					lastMeasuredTemp;
+			IoTtime_t 				lastMeasuredTime = 0;
 	
 	};
 	
